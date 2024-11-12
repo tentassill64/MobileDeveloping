@@ -60,6 +60,43 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private fun getData(city: String, context: Context) {
+    val url = "https://api.weatherapi.com/v1/forecast.json?key=" +
+            "$API_KEY" +
+            "&q=$city" +
+            "&days=3" +
+            "&aqi=no" +
+            "&alerts=no";
+
+    val queue = Volley.newRequestQueue(context);
+    val stringRequest = StringRequest(
+        Request.Method.GET,
+        url,
+        {
+                response ->
+        },
+        {
+                error ->
+        }
+    );
+    queue.add(stringRequest);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier, context: Context) {
     val state = remember {
