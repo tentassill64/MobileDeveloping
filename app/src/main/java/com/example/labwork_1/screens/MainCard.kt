@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.labwork_1.Data.WeatherModel
 import com.example.labwork_1.R
 import com.example.labwork_1.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -145,12 +147,13 @@ fun TabLayout() {
     val tabIndex = pagerState.currentPage;
     var coroutineScope = rememberCoroutineScope();
 
-    Column(modifier = Modifier
-        .padding(
-            start = 5.dp,
-            end = 5.dp
-        )
-        .clip(RoundedCornerShape(5.dp))
+    Column(
+        modifier = Modifier
+            .padding(
+                start = 5.dp,
+                end = 5.dp
+            )
+            .clip(RoundedCornerShape(5.dp))
     ) {
         androidx.compose.material.TabRow(
             selectedTabIndex = tabIndex,
@@ -161,30 +164,56 @@ fun TabLayout() {
                     Modifier.pagerTabIndicatorOffset(pagerState, pos)
                 )
             },
-            ) {
+        ) {
             tabList.forEachIndexed { index, text ->
                 Tab(
                     selected = false,
                     onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                }, text = {
-                    Text( text = text)
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    }, text = {
+                        Text(text = text)
                     }
                 )
             }
 
         }
     }
-    HorizontalPager(count = tabList.size,
+    HorizontalPager(
+        count = tabList.size,
         state = pagerState
+    ) { index ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-        index -> LazyColumn(modifier = Modifier.fillMaxSize()
-        ) {
-        items(15) {
-            ListItem()
+            itemsIndexed(
+                listOf(
+                    WeatherModel(
+                        city = "London",
+                        time = "10:00",
+                        condition = "Sunny",
+                        hours = "",
+                        minTemp = "",
+                        maxTemp = "",
+                        currentTemp = "25C",
+                        icon = "https://cdn.weatherapi.com/weather/64x64/night/116.png"
+                    ),
+                    WeatherModel(
+                        city = "London",
+                        time = "26/O6/24",
+                        condition = "Sunny",
+                        hours = "12:00",
+                        minTemp = "20",
+                        maxTemp = "25",
+                        currentTemp = "",
+                        icon = "https://cdn.weatherapi.com/weather/64x64/night/116.png"
+                    ),
+                )
+            ) { _, item ->
+                ListItem(item)
+            }
         }
-    }
     }
 }
