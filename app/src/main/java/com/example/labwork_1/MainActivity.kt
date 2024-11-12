@@ -37,13 +37,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LabWork_1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "London",
-                        modifier = Modifier.padding(innerPadding),
-                        context = this
-                    )
-                }
+
             }
         }
     }

@@ -53,6 +53,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation("com.android.volley:volley:1.2.1")
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
