@@ -21,12 +21,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.labwork_1.screens.MainCard
+import com.example.labwork_1.screens.TabLayout
 import com.example.labwork_1.ui.theme.LabWork_1Theme
 import org.json.JSONObject
 
@@ -36,8 +41,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LabWork_1Theme {
 
+            LabWork_1Theme {
+                androidx.compose.foundation.Image(
+                    painter = painterResource(id = R.drawable.weather_bg),
+                    contentDescription = "im1",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .alpha(0.7f),
+                    contentScale = ContentScale.FillBounds
+                )
+                Column {
+                    MainCard()
+                    TabLayout()
+                }
             }
         }
     }
