@@ -41,8 +41,9 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
-@Preview(showBackground = true)
 @Composable
 fun MainCard(currentDate: MutableState<WeatherModel>) {
     Column(
@@ -98,7 +99,9 @@ fun MainCard(currentDate: MutableState<WeatherModel>) {
                     color = Color.White
                 )
                 Text(
-                    text = currentDate.value.currentTemp,
+                    text = if(currentDate.value.currentTemp.isNotEmpty())
+                        currentDate.value.currentTemp
+                    else currentDate.value.maxTemp,
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
@@ -142,7 +145,7 @@ fun MainCard(currentDate: MutableState<WeatherModel>) {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>, currentDate: MutableState<WeatherModel>) {
     val tabList = listOf("HOURS", "DAYS");
     val pagerState = rememberPagerState();
     val tabIndex = pagerState.currentPage;
@@ -185,15 +188,37 @@ fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
         count = tabList.size,
         state = pagerState
     ) { index ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            itemsIndexed(
-                daysList.value
-            ) { _, item ->
-                ListItem(item)
-            }
+        val list = when(index) {
+            0 -> getWeatherByHours(currentDate.value.hours)
+            1 -> daysList.value
+            else -> daysList.value
         }
+        MainList(list, currentDate)
     }
+}
+
+private fun getWeatherByHours(hours: String):List<WeatherModel> {
+    if(hours.isEmpty()) return listOf();
+
+    val hoursArray = JSONArray(hours);
+
+    val list = ArrayList<WeatherModel>();
+
+    for( i in 0 until hoursArray.length() ) {
+        val item = hoursArray[i] as JSONObject;
+        list.add(
+            WeatherModel(
+                "",
+                item.getString("time"),
+                item.getString("temp_c") + "C",
+                item.getJSONObject("condition").getString("text"),
+                item.getJSONObject("condition").getString("icon"),
+                "",
+                "",
+                ""
+            )
+        )
+    }
+
+    return list;
 }
