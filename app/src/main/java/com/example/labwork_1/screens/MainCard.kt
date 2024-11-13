@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
-fun MainCard() {
+fun MainCard(currentDate: MutableState<WeatherModel>) {
     Column(
         modifier = Modifier
             .padding(5.dp)
@@ -73,7 +73,7 @@ fun MainCard() {
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "20 Jun 2024 13:00",
+                            text = currentDate.value.time,
                             modifier = Modifier.padding(
                                 top = 8.dp,
                                 start = 8.dp
@@ -82,7 +82,7 @@ fun MainCard() {
                             color = Color.White
                         )
                         AsyncImage(
-                            model = "https://cdn.weatherapi.com/weather/64x64/night/116.png",
+                            model = "https:${currentDate.value.icon}",
                             contentDescription = "im2", modifier = Modifier
                                 .size(35.dp)
                                 .padding(
@@ -93,17 +93,17 @@ fun MainCard() {
                     }
                 }
                 Text(
-                    text = "Мadrid",
+                    text = currentDate.value.city,
                     style = TextStyle(fontSize = 24.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "23 C",
+                    text = currentDate.value.currentTemp,
                     style = TextStyle(fontSize = 65.sp),
                     color = Color.White
                 )
                 Text(
-                    text = "Sunny",
+                    text = currentDate.value.condition,
                     style = TextStyle(fontSize = 16.sp),
                     color = Color.White
                 )
@@ -121,7 +121,7 @@ fun MainCard() {
                         )
                     }
                     Text(
-                        text = "23 C/12 C",
+                        text = "${currentDate.value.maxTemp}C/${currentDate.value.minTemp}C",
                         style = TextStyle(fontSize = 16.sp),
                         color = Color.White
                     )
