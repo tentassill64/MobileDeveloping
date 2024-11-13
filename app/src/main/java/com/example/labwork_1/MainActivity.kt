@@ -32,6 +32,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.labwork_1.Data.WeatherModel
+import com.example.labwork_1.screens.DialogSearch
 import com.example.labwork_1.screens.MainCard
 import com.example.labwork_1.screens.TabLayout
 import com.example.labwork_1.ui.theme.LabWork_1Theme
@@ -59,6 +60,15 @@ class MainActivity : ComponentActivity() {
                 )
                 )
             }
+            val dialogState = remember {
+                mutableStateOf(false);
+            }
+
+            if(dialogState.value) {
+                DialogSearch(dialogState, onSubmit =  {
+                    getData(it, context = this, daysList, currentDay);
+                });
+            }
             getData(city = "London", context = this, daysList, currentDay);
             LabWork_1Theme {
                 androidx.compose.foundation.Image(
@@ -70,7 +80,11 @@ class MainActivity : ComponentActivity() {
                     contentScale = ContentScale.FillBounds
                 )
                 Column {
-                    MainCard(currentDay)
+                    MainCard(currentDay, onClickSync = {
+                        getData(city = "London", context = this@MainActivity, daysList, currentDay);
+                    }, onClickSearch = {
+                        dialogState.value = true;
+                    })
                     TabLayout(daysList, currentDay)
                 }
             }
